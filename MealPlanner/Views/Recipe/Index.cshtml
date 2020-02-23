@@ -1,18 +1,19 @@
 @model MealPlanner.Models.Recipe
 
-@{
-    Layout = null;
-}
-
 <!DOCTYPE html>
 
 <html>
 <head>
-    <title>Model.Name</title>
 </head>
 <body>
 <div>
-    
+    <h2>@Model.Name</h2>
+    <br/>
+    @foreach (var m in Model.Ingridients)
+    {
+        @m
+        <br/>
+    }
 </div>
 </body>
 </html>
