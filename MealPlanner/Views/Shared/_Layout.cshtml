@@ -4,21 +4,26 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link href="/lib/bootstrap/dist/css/*.css" rel="stylesheet"/>
+    <link href="/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
-<header>
-    <h1 class="text-center text-uppercase">Meal Planner</h1></header>
-<div class="navbar" role="navigation">
-    <div class="row">
-        <a href="#">Go to calendar</a>
-        <a href="#">Add new recipe</a>
-        <a href="#">Info</a>
+<header><h1 class="text-center text-uppercase" style="padding-top: 30px; padding-bottom: 20px">Meal Planner</h1></header>
+<div class="container">
+    <div class="row justify-content-around" style="padding-bottom: 30px">
+        <a href="#" style="height: 24px; text-decoration: none" class="col-4 badge-dark text-center">Calendar</a>
+        <a href="#" style="height: 24px; text-decoration: none" class="col-4 badge-dark text-center">Recipes</a>
+        <a href="#" style="height: 24px; text-decoration: none" class="col-4 badge-dark text-center">Info</a>
     </div>
 </div>
 @RenderBody()
-<footer>
-
-</footer>
 </body>
+<div class="container">
+     <div class="row">
+         <div class="col align-items-end" style="padding-top: 30px;">
+             <footer class="card-footer">
+                 (c)Adelhaide, 2020
+             </footer>
+         </div> 
+     </div> 
+</div>
 </html>
