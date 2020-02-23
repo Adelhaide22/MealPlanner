@@ -8,8 +8,8 @@ namespace MealPlanner.Models
     public class Recipe
     {
         public string Name { get; set; }
-        public string Category { get; set; } // list
+        public List<string> Category { get; set; }
         public List<string> Ingridients { get; set; }
-        public string Instruction { get; set; }
+        public string Instructions { get; set; }
     }
 }
