@@ -340,4 +340,4 @@ ASALocalRun/
 healthchecksdb
 
 # wwwroot
-wwwroot/lib
+/MealPlanner/wwwroot/lib/

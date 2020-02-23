@@ -9,7 +9,7 @@ namespace MealPlanner.Controllers
         // GET
         public IActionResult Index()
         {
-            var recipe = new Recipe() {Name = "Meat", Ingridients = new List<string>(){"meat","oil"}};
+            var recipe = new Recipe() {Name = "Meat", Ingridients = new List<string>(){"Meat","Oil","Egg"}};
             return View(recipe);
         }
     }
