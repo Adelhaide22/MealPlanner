@@ -1,0 +1,21 @@
+name: Build
+on: push
+jobs:
+  Debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: dotnet build --configuration Debug
+    - name: Test
+      run: dotnet test
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: dotnet build --configuration Release
+    - name: Test
+      run: dotnet test
