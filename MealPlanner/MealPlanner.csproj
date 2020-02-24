@@ -4,6 +4,14 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\Shared\" />
+    <Folder Include="wwwroot\lib" />
+  </ItemGroup>
 
-
+  <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.4.1" />
+  </ItemGroup>
+  
 </Project>
