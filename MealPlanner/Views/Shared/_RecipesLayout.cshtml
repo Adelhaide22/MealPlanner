@@ -1,5 +1,5 @@
 @{
-    Layout = "_Layout";  
+    Layout = "_Layout";
 }
 
 <div class="container">
@@ -12,7 +12,7 @@
                     @foreach (var r in m.Recipes)
                     {
                         <li class="list-group-item">
-                            <a href="#" style="text-decoration: none; color: black">@r.Name</a>
+                            <a asp-controller="Recipe" asp-action="GetRecipe" asp-route-recipeId="@r.RecipeId" style="text-decoration: none; color: black">@r.Name</a>
                         </li>
                     }
                 </ul>
