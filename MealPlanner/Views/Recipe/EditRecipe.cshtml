@@ -1,9 +1,28 @@
+@model MealPlanner.Models.Recipe
 @{
     Layout = "_RecipesLayout";  
 }
 
 <div class="col-6">
-    <h2>
-        Edit
-    </h2>
+    <form asp-action="EditRecipe" asp-route-recipeId="@Model.RecipeId">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Name</label>
+                <input type="text" asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label">Categories</label>
+                <textarea placeholder="@string.Join('\n',Model.Categories)" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="form-group">
+                 <label asp-for="Ingredients" class="control-label">Ingredients</label>
+                 <textarea placeholder="@string.Join('\n',Model.Ingredients)" class="form-control" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                  <label asp-for="Instructions" class="control-label">Instructions</label>
+                  <textarea asp-for="Instructions" class="form-control" rows="15"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Send" class="btn btn-info" />
+            </div>
+        </form>
 </div>
