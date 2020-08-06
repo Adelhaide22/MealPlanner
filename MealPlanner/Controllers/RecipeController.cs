@@ -25,12 +25,12 @@ namespace MealPlanner.Controllers
                 new CategoriesMenuViewModel
                 {
                     CategoryName = "Meat",
-                    Recipes = _recipes.Where(r=>r.Categories.Contains("Meat"))
+                    Recipes = _recipes.Where(r=>r.Categories.Contains("Meat")).ToList()
                 },
                 new CategoriesMenuViewModel
                 {
                     CategoryName = "Soup",
-                    Recipes = _recipes.Where(r=>r.Categories.Contains("Soup"))
+                    Recipes = _recipes.Where(r=>r.Categories.Contains("Soup")).ToList()
                 }
             };
         }
@@ -73,12 +73,11 @@ namespace MealPlanner.Controllers
         }
         
         [HttpPost]
-        [Route("/DeleteRecipe/{recipeId}")]
         public IActionResult DeleteRecipe(int recipeId)
         {
             foreach (var category in _menu)
             {
-                foreach (var recipe in category.Recipes.ToList())
+                foreach (var recipe in category.Recipes)
                 {
                     if (recipe.RecipeId == recipeId)
                     {
@@ -86,13 +85,12 @@ namespace MealPlanner.Controllers
                     }
                 }
             }
-            ViewBag.Menu = _menu;
-            return View();
+            
+            return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        [Route("/DeleteRecipe/{recipeId}")]
-        public IActionResult ConfirmRecipeDeletion(int recipeId)
+        [ActionName("DeleteRecipe")]
+        public IActionResult ConfirmDeletion(int recipeId)
         {
             ViewBag.Menu = _menu;
             return View(_recipes.ElementAt(recipeId));
