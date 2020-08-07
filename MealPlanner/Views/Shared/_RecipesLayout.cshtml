@@ -1,10 +1,12 @@
 @{
-    Layout = "_Layout";  
+    Layout = "_Layout";
 }
 
 <div class="container">
     <div class="row justify-content-around">
         <div class="col-4">
+            <a asp-action="AddRecipe" class="btn btn-info mb-3" role="button">Add new recipe</a>
+            
             @foreach (var m in @ViewBag.Menu)
             {
                 <ul class="list-group">
@@ -12,7 +14,7 @@
                     @foreach (var r in m.Recipes)
                     {
                         <li class="list-group-item">
-                            <a href="#" style="text-decoration: none; color: black">@r.Name</a>
+                            <a asp-controller="Recipe" asp-action="GetRecipe" asp-route-recipeId="@r.RecipeId" style="text-decoration: none; color: black">@r.Name</a>
                         </li>
                     }
                 </ul>
