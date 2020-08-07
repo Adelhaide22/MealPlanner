@@ -67,12 +67,16 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public IActionResult EditRecipe(Recipe editedRecipe)
         {
-            if (_recipes.Contains(editedRecipe))
+            foreach (var recipe in _recipes)
             {
-                _recipes[editedRecipe.RecipeId] = editedRecipe;
+                if (recipe.RecipeId == editedRecipe.RecipeId)
+                {
+                    _recipes[editedRecipe.RecipeId] = editedRecipe;
+                    ViewBag.Menu = _menu;
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.Menu = _menu;
-            return RedirectToAction("Index");
+            return NotFound();
         }
         
         [HttpPost]
@@ -85,11 +89,12 @@ namespace MealPlanner.Controllers
                     if (recipe.RecipeId == recipeId)
                     {
                         _recipes.Remove(recipe);
+                        return RedirectToAction("Index");
                     }
                 }
             }
-            
-            return RedirectToAction("Index");
+
+            return NotFound();
         }
 
         [ActionName("DeleteRecipe")]
