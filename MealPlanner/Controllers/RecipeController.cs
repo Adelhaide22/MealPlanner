@@ -67,7 +67,10 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public IActionResult EditRecipe(Recipe editedRecipe)
         {
-            _recipes[editedRecipe.RecipeId] = editedRecipe;
+            if (_recipes.Contains(editedRecipe))
+            {
+                _recipes[editedRecipe.RecipeId] = editedRecipe;
+            }
             ViewBag.Menu = _menu;
             return RedirectToAction("Index");
         }
