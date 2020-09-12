@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using MealPlanner.Models.ViewModels;
 
 namespace MealPlanner.Models.ViewModels
 {
