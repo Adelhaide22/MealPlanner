@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MealPlanner.Models;
@@ -23,10 +24,8 @@ namespace MealPlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRecipe(Recipe newRecipe)
         {
-            newRecipe.Categories = newRecipe.Categories[0].Split(('\n')).ToList();
-            newRecipe.Categories.ForEach(s => s.Trim('\r'));
-            newRecipe.Ingredients = newRecipe.Ingredients[0].Split(('\n')).ToList();
-            newRecipe.Ingredients.ForEach(s => s.Trim('\r'));
+            newRecipe.Categories = newRecipe.Categories[0].Split('\r' + Environment.NewLine).ToList();
+            newRecipe.Ingredients = newRecipe.Ingredients[0].Split('\r' + Environment.NewLine).ToList();
             
             await db.Recipes.AddAsync(newRecipe);
             await db.SaveChangesAsync();

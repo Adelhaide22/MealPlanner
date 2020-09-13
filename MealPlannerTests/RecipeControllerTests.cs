@@ -35,6 +35,8 @@ namespace MealPlannerTests
 
             recipeController.AddRecipe(newRecipe);
 
+            navMenu.CategoriesMenuViewModels = NavMenu.GenerateMenu(context.Recipes.ToList());
+            
             context.Recipes.Count().Should().Be(4);
             navMenu.CategoriesMenuViewModels.Count.Should().Be(3);
         }
