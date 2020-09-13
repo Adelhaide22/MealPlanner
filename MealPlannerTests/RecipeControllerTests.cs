@@ -15,37 +15,6 @@ namespace MealPlannerTests
     {
         private static Random rnd = new Random();
         
-        private List<Recipe> recipes = new List<Recipe>()
-        {
-            new Recipe()
-            {
-                Categories = new List<string>() {"1", "2"}, Ingredients = new List<string>() {"cheese"},
-                Instructions = "just cook and eat", Name = "a", RecipeId = 1
-            },
-            new Recipe()
-            {
-                Categories = new List<string>() {"1"}, Ingredients = new List<string>() {"cheese"},
-                Instructions = "just cook and eat", Name = "b", RecipeId = 2
-            },
-            new Recipe()
-            {
-                Categories = new List<string>() {"2"}, Ingredients = new List<string>() {"cheese"},
-                Instructions = "just cook and eat", Name = "c", RecipeId = 3
-            }
-        };
-
-        
-        public void Te()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationContext>()
-                .UseInMemoryDatabase(databaseName: "1")
-                .Options;
-            
-            var context = new ApplicationContext(options);
-            context.Recipes.RemoveRange(context.Recipes);
-            context.SaveChanges();
-        }
-        
         [Fact]
         public void AddRecipe_NewCategoryAdded_NewCategoryCreated()
         {
@@ -54,8 +23,6 @@ namespace MealPlannerTests
                 .Options;
             
             var context = new ApplicationContext(options);
-            context.Recipes.RemoveRange(context.Recipes);
-            context.SaveChanges();
 
             var newRecipe = new Recipe()
             {
@@ -63,9 +30,6 @@ namespace MealPlannerTests
                 Instructions = "just cook and eat", Name = "d", RecipeId = 4
             };
             
-            context.Recipes.AddRange(recipes);
-            context.SaveChanges();
-
             var navMenu = new NavMenu(context);
             var recipeController = new RecipeController(context);
 
