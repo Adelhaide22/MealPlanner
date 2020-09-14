@@ -13,11 +13,10 @@ namespace MealPlannerTests
 {
     public class RecipeControllerTests
     {
-        private static Random rnd = new Random();
-        
         [Fact]
         public void AddRecipe_NewCategoryAdded_NewCategoryCreated()
         {
+            var rnd = new Random();
             var options = new DbContextOptionsBuilder<ApplicationContext>()
                 .UseInMemoryDatabase(databaseName: rnd.Next().ToString())
                 .Options;

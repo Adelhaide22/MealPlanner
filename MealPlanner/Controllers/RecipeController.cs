@@ -49,8 +49,6 @@ namespace MealPlanner.Controllers
             db.Recipes.Update(editedRecipe);
             await db.SaveChangesAsync();
             
-            //update menu if categories were changed
-            
             return RedirectToAction("Index");
         }
         
@@ -58,8 +56,6 @@ namespace MealPlanner.Controllers
         public async Task<IActionResult> DeleteRecipe(int recipeId)
         {
             var recipe = await db.Recipes.FirstOrDefaultAsync(r => r.RecipeId == recipeId);
-            
-            // update menu
             
             if (recipe != null)
             {
