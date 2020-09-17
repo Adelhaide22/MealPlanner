@@ -31,19 +31,19 @@ namespace MealPlannerTests
             navMenu = new NavMenu(context);
             recipeController = new RecipeController(context);
             
-            var recipe1 = new Recipe()
+            var recipe1 = new Recipe
             {
-                Categories = new List<string>() {"1", "2"}, Ingredients = new List<string>() {"cheese"},
+                Categories = new List<string> {"1", "2"}, Ingredients = new List<string> {"cheese"},
                 Instructions = "just cook and eat", Name = "a", RecipeId = 1
             };
-            var recipe2 = new Recipe()
+            var recipe2 = new Recipe
             {
-                Categories = new List<string>() {"1"}, Ingredients = new List<string>() {"cheese"},
+                Categories = new List<string> {"1"}, Ingredients = new List<string> {"cheese"},
                 Instructions = "just cook and eat", Name = "b", RecipeId = 2
             };
-            var recipe3 = new Recipe()
+            var recipe3 = new Recipe
             {
-                Categories = new List<string>() {"2"}, Ingredients = new List<string>() {"cheese"},
+                Categories = new List<string> {"2"}, Ingredients = new List<string> {"cheese"},
                 Instructions = "just cook and eat", Name = "c", RecipeId = 3
             };
             context.Recipes.AddRange(recipe1, recipe2, recipe3);
