@@ -1,4 +1,4 @@
-@model MealPlanner.Models.Recipe
+@model MealPlanner.Models.ViewModels.RecipeViewModel
 @{
     Layout = "_RecipesLayout";  
 }
@@ -6,15 +6,10 @@
 <div class="col-6">
     <h2 class="text-center">@Model.Name</h2>
     <br/>
-    <ul>
-    @foreach (var ingredient in Model.Ingredients)
-    {
-        <li>@ingredient</li>
-    }
-    </ul>
+    @Model.Ingredients
     <div class="container">
         <div class="row justify-content-md-around mb-3">
-            <a asp-action="EditRecipe" class="btn btn-dark" role="button">Edit</a>
+            <a asp-action="EditRecipe" asp-route-recipeId="@Model.RecipeId" class="btn btn-dark" role="button">Edit</a>
             <a asp-action="DeleteRecipe" asp-route-recipeId="@Model.RecipeId" class="btn btn-info" role="button">Delete</a>
         </div>
     </div>

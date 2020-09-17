@@ -1,7 +1,7 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MealPlanner.Models;
+using MealPlanner.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,16 +18,17 @@ namespace MealPlanner.Controllers
         
         public IActionResult GetRecipe(int recipeId)
         {
-            return View(db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId));
+            var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            var recipeViewModel = ParseToViewModel(recipe);
+            return View(recipeViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRecipe(Recipe newRecipe)
+        public async Task<IActionResult> AddRecipe(RecipeViewModel newRecipe)
         {
-            newRecipe.Categories = newRecipe.Categories[0].Split('\r' + Environment.NewLine).ToList();
-            newRecipe.Ingredients = newRecipe.Ingredients[0].Split('\r' + Environment.NewLine).ToList();
+            var recipe = ParseFromViewModel(newRecipe);
             
-            await db.Recipes.AddAsync(newRecipe);
+            await db.Recipes.AddAsync(recipe);
             await db.SaveChangesAsync();
             
             return RedirectToAction("Index");
@@ -40,13 +41,17 @@ namespace MealPlanner.Controllers
 
         public IActionResult EditRecipe(int recipeId)
         {
-            return View(db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId));
+            var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            var recipeViewModel = ParseToViewModel(recipe);
+            return View(recipeViewModel);
         }
-        
+
         [HttpPost]
-        public async Task<IActionResult> EditRecipe(Recipe editedRecipe)
+        public async Task<IActionResult> EditRecipe(RecipeViewModel editedRecipe)
         {
-            db.Recipes.Update(editedRecipe);
+            var recipe = ParseFromViewModel(editedRecipe);
+            
+            db.Recipes.Update(recipe);
             await db.SaveChangesAsync();
             
             return RedirectToAction("Index");
@@ -70,13 +75,38 @@ namespace MealPlanner.Controllers
         [ActionName("DeleteRecipe")]
         public IActionResult ConfirmDeletion(int recipeId)
         {
-            return View(db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId));
+            var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            var recipeViewModel = ParseToViewModel(recipe);
+            return View(recipeViewModel);
         }
-
 
         public IActionResult Index()
         {
             return View();
+        }
+
+        private RecipeViewModel ParseToViewModel(Recipe recipe)
+        {
+            return new RecipeViewModel
+            {
+                RecipeId = recipe.RecipeId,
+                Name = recipe.Name,
+                Categories = string.Join(", ", recipe.Categories),
+                Ingredients = string.Join(", ", recipe.Ingredients),
+                Instructions = recipe.Instructions
+            };
+        }
+        
+        private Recipe ParseFromViewModel(RecipeViewModel recipeViewModel)
+        {
+            return new Recipe
+            {
+                RecipeId = recipeViewModel.RecipeId,
+                Name = recipeViewModel.Name,
+                Categories = recipeViewModel.Categories.Split(", ").ToList(),
+                Ingredients = recipeViewModel.Ingredients.Split(", ").ToList(),
+                Instructions = recipeViewModel.Instructions
+            };
         }
     }
 }

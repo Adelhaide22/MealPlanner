@@ -8,7 +8,7 @@ using Xunit;
 
 namespace MealPlannerTests
 {
-    public class MenuTests  
+    public class MenuTests
     {
         [Fact]
         public void GenerateMenu_DifferentRecipesAdded_DifferentCategoriesCreated()
