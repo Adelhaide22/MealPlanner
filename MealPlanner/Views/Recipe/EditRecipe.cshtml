@@ -1,4 +1,4 @@
-@model MealPlanner.Models.Recipe
+@model MealPlanner.Models.ViewModels.RecipeViewModel
 @{
     Layout = "_RecipesLayout";  
 }
@@ -11,15 +11,15 @@
         </div>
         <div class="form-group">
             <label asp-for="Categories" class="control-label">Categories</label>
-            <textarea class="form-control" rows="5">@string.Join('\n',Model.Categories)</textarea>
+            <input type="text" asp-for="Categories" class="form-control">
         </div>
         <div class="form-group">
             <label asp-for="Ingredients" class="control-label">Ingredients</label>
-            <textarea class="form-control" rows="10">@string.Join('\n',Model.Ingredients)</textarea>
+            <input type="text" asp-for="Ingredients" class="form-control">
         </div>
         <div class="form-group">
             <label asp-for="Instructions" class="control-label">Instructions</label>
-            <textarea asp-for="Instructions" class="form-control" rows="15"></textarea>
+            <input type="text" asp-for="Instructions" class="form-control">
         </div>
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-info" />
