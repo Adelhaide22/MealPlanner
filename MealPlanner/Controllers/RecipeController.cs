@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MealPlanner.Models;
@@ -18,7 +19,12 @@ namespace MealPlanner.Controllers
         
         public IActionResult GetRecipe(int recipeId)
         {
-            var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            var recipe = db.Recipes
+                .Include(r => r.RecipesCategories)
+                    .ThenInclude(rc => rc.Category)
+                .Include(r => r.RecipesIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefault(r => r.RecipeId == recipeId);
             var recipeViewModel = ParseToViewModel(recipe);
             return View(recipeViewModel);
         }
@@ -29,6 +35,8 @@ namespace MealPlanner.Controllers
             var recipe = ParseFromViewModel(newRecipe);
             
             await db.Recipes.AddAsync(recipe);
+            await db.RecipesCategories.AddRangeAsync(recipe.RecipesCategories);
+            await db.RecipesIngredients.AddRangeAsync(recipe.RecipesIngredients);
             await db.SaveChangesAsync();
             
             return RedirectToAction("Index");
@@ -41,7 +49,12 @@ namespace MealPlanner.Controllers
 
         public IActionResult EditRecipe(int recipeId)
         {
-            var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
+            var recipe = db.Recipes
+                .Include(r => r.RecipesCategories)
+                    .ThenInclude(rc => rc.Category)
+                .Include(r => r.RecipesIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                .FirstOrDefault(r => r.RecipeId == recipeId);
             var recipeViewModel = ParseToViewModel(recipe);
             return View(recipeViewModel);
         }
@@ -91,20 +104,71 @@ namespace MealPlanner.Controllers
             {
                 RecipeId = recipe.RecipeId,
                 Name = recipe.Name,
-                Categories = string.Join(", ", recipe.Categories),
-                Ingredients = string.Join(", ", recipe.Ingredients),
+                Categories = string.Join(", ", recipe.RecipesCategories.FirstOrDefault(r => r.CategoryId == recipe.RecipeId)),
+                Ingredients = string.Join(", ", recipe.RecipesIngredients.FirstOrDefault(r => r.IngredientId == recipe.RecipeId)),
                 Instructions = recipe.Instructions
             };
         }
         
         private Recipe ParseFromViewModel(RecipeViewModel recipeViewModel)
         {
+            var categories = recipeViewModel.Categories.Split(", ").ToList();
+            var categoryIds = new List<int>();
+            foreach (var c in categories)
+            {
+                var id = db.RecipesCategories
+                    .FirstOrDefault(rc => rc.Category.CategoryName == c)?.CategoryId 
+                         ?? categoryIds.Count + 1;
+                categoryIds.Add(id);
+            }
+            var recipesCategories = new List<RecipeCategory>();
+            foreach (var id in categoryIds)
+            {
+                db.Categories.AddAsync(new Category
+                {
+                    CategoryName = categories[id - 1]
+                });
+                db.SaveChanges();
+                recipesCategories.Add(new RecipeCategory
+                    {
+                        RecipeId = recipeViewModel.RecipeId,
+                        CategoryId = id,
+                    }
+                );
+            }
+
+
+            var ingredients = recipeViewModel.Ingredients.Split(", ").ToList();
+            var ingredientIds = new List<int>();
+            foreach (var i in ingredients)
+            {
+                var id = db.RecipesIngredients
+                    .FirstOrDefault(ri => ri.Ingredient.IngredientName == i)?.IngredientId
+                    ?? ingredientIds.Count + 1;
+                ingredientIds.Add(id);
+            }
+            var recipesIngredients = new List<RecipeIngredient>();
+            foreach (var id in ingredientIds)
+            {
+                db.Ingredients.AddAsync(new Ingredient
+                {
+                    IngredientName = ingredients[id-1],
+                });
+                db.SaveChanges();
+                recipesIngredients.Add(new RecipeIngredient
+                    {
+                        RecipeId = recipeViewModel.RecipeId,
+                        IngredientId = id,
+                    }
+                );
+            }
+            
             return new Recipe
             {
                 RecipeId = recipeViewModel.RecipeId,
                 Name = recipeViewModel.Name,
-                Categories = recipeViewModel.Categories.Split(", ").ToList(),
-                Ingredients = recipeViewModel.Ingredients.Split(", ").ToList(),
+                RecipesCategories = recipesCategories,
+                RecipesIngredients = recipesIngredients,
                 Instructions = recipeViewModel.Instructions
             };
         }

@@ -9,6 +9,10 @@ namespace MealPlanner
     public sealed class ApplicationContext : DbContext
     {
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RecipeCategory> RecipesCategories { get; set; }
+        public DbSet<RecipeIngredient> RecipesIngredients { get; set; }
 
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
@@ -18,12 +22,28 @@ namespace MealPlanner
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // string -> List<string> converter
-            var splitStringConverter = new ValueConverter<List<string>, string>(v => string.Join(";", v),
-                v => v.Split(new[] { ';' }).ToList());
-            builder.Entity<Recipe>().Property(nameof(Recipe.Categories)).HasConversion(splitStringConverter);
-            builder.Entity<Recipe>().Property(nameof(Recipe.Ingredients)).HasConversion(splitStringConverter);
-
+            builder.Entity<RecipeCategory>()
+                .HasKey(rc => new { rc.RecipeId, rc.CategoryId });  
+            builder.Entity<RecipeCategory>()
+                .HasOne(rc => rc.Recipe)
+                .WithMany(r => r.RecipesCategories)
+                .HasForeignKey(rc => rc.RecipeId);
+            builder.Entity<RecipeCategory>()
+                .HasOne(rc => rc.Category)
+                .WithMany(c => c.RecipesCategories)
+                .HasForeignKey(rc => rc.CategoryId); 
+            
+            builder.Entity<RecipeIngredient>()
+                .HasKey(ri => new { ri.RecipeId, ri.IngredientId });  
+            builder.Entity<RecipeCategory>()
+                .HasOne(rc => rc.Recipe)
+                .WithMany(r => r.RecipesCategories)
+                .HasForeignKey(rc => rc.RecipeId);
+            builder.Entity<RecipeCategory>()
+                .HasOne(rc => rc.Category)
+                .WithMany(c => c.RecipesCategories)
+                .HasForeignKey(rc => rc.CategoryId); 
+            
             base.OnModelCreating(builder);
         } 
     }
