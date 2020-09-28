@@ -25,14 +25,14 @@ namespace MealPlanner.Controllers
                 .Include(r => r.RecipesIngredients)
                     .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefault(r => r.RecipeId == recipeId);
-            var recipeViewModel = ParseToViewModel(recipe);
+            var recipeViewModel = ConvertToViewModel(recipe);
             return View(recipeViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddRecipe(RecipeViewModel newRecipe)
         {
-            var recipe = ParseFromViewModel(newRecipe);
+            var recipe = ConvertFromViewModel(newRecipe);
             
             await db.Recipes.AddAsync(recipe);
             await db.RecipesCategories.AddRangeAsync(recipe.RecipesCategories);
@@ -55,14 +55,14 @@ namespace MealPlanner.Controllers
                 .Include(r => r.RecipesIngredients)
                     .ThenInclude(ri => ri.Ingredient)
                 .FirstOrDefault(r => r.RecipeId == recipeId);
-            var recipeViewModel = ParseToViewModel(recipe);
+            var recipeViewModel = ConvertToViewModel(recipe);
             return View(recipeViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditRecipe(RecipeViewModel editedRecipe)
         {
-            var recipe = ParseFromViewModel(editedRecipe);
+            var recipe = ConvertFromViewModel(editedRecipe);
             
             db.Recipes.Update(recipe);
             await db.SaveChangesAsync();
@@ -89,7 +89,7 @@ namespace MealPlanner.Controllers
         public IActionResult ConfirmDeletion(int recipeId)
         {
             var recipe = db.Recipes.FirstOrDefault(r => r.RecipeId == recipeId);
-            var recipeViewModel = ParseToViewModel(recipe);
+            var recipeViewModel = ConvertToViewModel(recipe);
             return View(recipeViewModel);
         }
 
@@ -98,7 +98,7 @@ namespace MealPlanner.Controllers
             return View();
         }
 
-        private RecipeViewModel ParseToViewModel(Recipe recipe)
+        private RecipeViewModel ConvertToViewModel(Recipe recipe)
         {
             return new RecipeViewModel
             {
@@ -110,7 +110,7 @@ namespace MealPlanner.Controllers
             };
         }
         
-        private Recipe ParseFromViewModel(RecipeViewModel recipeViewModel)
+        private Recipe ConvertFromViewModel(RecipeViewModel recipeViewModel)
         {
             var categories = recipeViewModel.Categories.Split(", ").ToList();
             var categoryIds = new List<int>();
@@ -136,7 +136,6 @@ namespace MealPlanner.Controllers
                     }
                 );
             }
-
 
             var ingredients = recipeViewModel.Ingredients.Split(", ").ToList();
             var ingredientIds = new List<int>();

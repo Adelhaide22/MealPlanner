@@ -1,17 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 
 namespace MealPlanner.Models.ViewModels
 {
     public class NavMenuViewModel
     {
-        public List<Category> Categories;
-        private ApplicationContext db;
+        public ImmutableList<Category> Categories { get; }
         
-        public NavMenuViewModel(ApplicationContext context)
+        public NavMenuViewModel(ImmutableList<Category> categories)
         {
-            db = context;
-            Categories = db.Categories.ToList();
+            Categories = categories;
         }
     }
 }
