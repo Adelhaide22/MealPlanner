@@ -10,14 +10,14 @@
         <div class="col-4">
             <a asp-action="AddRecipe" class="btn btn-info mb-3" role="button">Add new recipe</a>
             
-            @foreach (var m in navMenu.GetNavMenu().Categories)
+            @foreach (var c in navMenu.GetNavMenu().Categories)
             {
                 <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark" style="padding-bottom: 12px;">@m.CategoryName</li>
-                    @foreach (var r in m.RecipesCategories.Where(rc => rc.CategoryId == m.CategoryId))
+                    <li class="list-group-item list-group-item-dark" style="padding-bottom: 12px;">@c.CategoryName</li>
+                    @foreach (var rc in navMenu.GetRecipesForCategory(c))
                     {
                         <li class="list-group-item">
-                            <a asp-controller="Recipe" asp-action="GetRecipe" asp-route-recipeId="@r.RecipeId" style="text-decoration: none; color: black">@r.Recipe.Name</a>
+                            <a asp-controller="Recipe" asp-action="GetRecipe" asp-route-recipeId="@rc.RecipeId" style="display: block; text-decoration: none; color: black">@rc.Recipe.Name</a>
                         </li>
                     }
                 </ul>
