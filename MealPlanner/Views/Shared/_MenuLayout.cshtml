@@ -1,0 +1,28 @@
+@using MealPlanner.Services
+@{
+    Layout = "_Layout";
+}
+
+@inject DisplayNavMenuService navMenu;
+
+<div class="container">
+    <div class="row justify-content-around">
+        <div class="col-4">
+            <a asp-action="AddRecipe" class="btn btn-info mb-3" role="button">Add new recipe</a>
+            
+            @foreach (var c in navMenu.GetNavMenu().Categories)
+            {
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-dark" style="padding-bottom: 12px;">@c.CategoryName</li>
+                    @foreach (var rc in navMenu.GetRecipesForCategory(c))
+                    {
+                        <li class="list-group-item">
+                            <a asp-controller="Recipe" asp-action="GetRecipe" asp-route-recipeId="@rc.RecipeId" style="display: block; text-decoration: none; color: black">@rc.Recipe.Name</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+        @RenderBody()
+    </div>
+</div>
